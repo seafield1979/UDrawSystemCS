@@ -53,6 +53,19 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UDraw\UDraw.cs" />
+    <Compile Include="UDraw\UDrawable.cs" />
+    <Compile Include="UDraw\UDrawableRect.cs" />
+    <Compile Include="UDraw\UDrawManager.cs" />
+    <Compile Include="UUtil\TimeCountByPerformanceCounter.cs" />
+    <Compile Include="UUtil\UDebug.cs" />
+    <Compile Include="UUtil\ULog.cs" />
+    <Compile Include="UUtil\UUtility.cs" />
+    <Compile Include="UView\ScrollBar\UScrollBar.cs" />
+    <Compile Include="UView\UTextView.cs" />
+    <Compile Include="UView\ViewTouch.cs" />
+    <Compile Include="UView\Window\ULogWindow.cs" />
+    <Compile Include="UView\Window\UWindow.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

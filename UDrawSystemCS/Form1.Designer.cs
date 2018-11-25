@@ -57,8 +57,8 @@
             treeNode14,
             treeNode15});
             this.panel1 = new System.Windows.Forms.Panel();
-            this.splitter1 = new System.Windows.Forms.Splitter();
             this.treeView1 = new System.Windows.Forms.TreeView();
+            this.splitter1 = new System.Windows.Forms.Splitter();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -71,14 +71,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(200, 567);
             this.panel1.TabIndex = 0;
-            // 
-            // splitter1
-            // 
-            this.splitter1.Location = new System.Drawing.Point(200, 0);
-            this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 567);
-            this.splitter1.TabIndex = 1;
-            this.splitter1.TabStop = false;
             // 
             // treeView1
             // 
@@ -138,6 +130,14 @@
             this.treeView1.TabIndex = 0;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             // 
+            // splitter1
+            // 
+            this.splitter1.Location = new System.Drawing.Point(200, 0);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(3, 567);
+            this.splitter1.TabIndex = 1;
+            this.splitter1.TabStop = false;
+            // 
             // panel2
             // 
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -146,6 +146,10 @@
             this.panel2.Size = new System.Drawing.Size(610, 567);
             this.panel2.TabIndex = 2;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
+            this.panel2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseDown);
+            this.panel2.MouseLeave += new System.EventHandler(this.panel2_MouseLeave);
+            this.panel2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseMove);
+            this.panel2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseUp);
             // 
             // Form1
             // 

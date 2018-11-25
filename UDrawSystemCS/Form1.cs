@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using UDrawSystemCS.UView;
+using UDrawSystemCS.UUtil;
+using UDrawSystemCS.UDraw;
 
 namespace UDrawSystemCS
 {
@@ -28,6 +31,11 @@ namespace UDrawSystemCS
         #region プロパティ
 
         public EDrawMode drawMode;
+
+        // マウスのイベントを変換するクラス
+        private ViewTouch vt;
+
+        private UDrawManager drawManager;
 
         #endregion プロパティ
 
@@ -127,6 +135,13 @@ namespace UDrawSystemCS
         private void Initialize()
         {
             drawMode = EDrawMode.Draw1;
+
+            ULog.init();
+
+            vt = new ViewTouch();
+
+            drawManager = new UDrawManager();
+            
         }
         #endregion メソッド
 
@@ -146,5 +161,29 @@ namespace UDrawSystemCS
         }
 
         #endregion DrawModeメソッド
+
+        #region Mouseイベント
+        private void panel2_MouseDown(object sender, MouseEventArgs e)
+        {
+            vt.checkTouchType(MouseEvent.Down, e);
+        }
+        
+        private void panel2_MouseMove(object sender, MouseEventArgs e)
+        {
+            vt.checkTouchType(MouseEvent.Move, e);
+        }
+
+        private void panel2_MouseUp(object sender, MouseEventArgs e)
+        {
+            vt.checkTouchType(MouseEvent.Up, e);
+        }
+
+        private void panel2_MouseLeave(object sender, EventArgs e)
+        {
+            vt.checkTouchType(MouseEvent.Cancel, null);
+        }
+
+        #endregion Mouseイベント
+
     }
 }
