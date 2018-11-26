@@ -4,6 +4,7 @@ using System.Drawing;
 using UDrawSystemCS.UUtil;
 using UDrawSystemCS.UView;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace UDrawSystemCS.UDraw
 {
@@ -98,7 +99,6 @@ namespace UDrawSystemCS.UDraw
                 {
                     allDone = false;
                 }
-                ULog.count(UDrawManager.TAG);
                 PointF offset = obj.getDrawOffset();
                 obj.draw(g, offset);
                 drawId(g, obj.getRect(), priority);
@@ -180,21 +180,6 @@ namespace UDrawSystemCS.UDraw
             UDrawManager manager = UDrawManager.getInstance();
             bool ret = false;
 
-            if (vt.isTouchUp)
-            {
-                manager.setTouchingObj(null);
-            }
-            // タッチを放すまではタッチしたオブジェクトのみ処理する
-            if (manager.getTouchingObj() != null &&
-                    vt.type != TouchType.Touch)
-            {
-                if (manager.getTouchingObj().touchEvent(vt, PointF.Empty))
-                {
-                    return true;
-                }
-                return false;
-            }
-
             // 手前に表示されたものから処理したいのでリストを逆順で処理する
             list.Reverse();
             foreach ( UDrawable obj in list)
@@ -207,10 +192,6 @@ namespace UDrawSystemCS.UDraw
 
                 if (obj.touchEvent(vt, offset))
                 {
-                    if (vt.type == TouchType.Touch)
-                    {
-                        manager.setTouchingObj(obj);
-                    }
                     ret = true;
                     break;
                 }
@@ -274,7 +255,8 @@ namespace UDrawSystemCS.UDraw
         private UDrawable touchingObj;
 
         // ページのリスト
-        private Dictionary<int, Dictionary<int, DrawList>> mPageList;
+        //private Dictionary<int, Dictionary<int, DrawList>> mPageList;
+        private Dictionary<int, DrawList> mDrawList;
 
         // カレントページ
         private int mCurrentPage = DEFAULT_PAGE;
@@ -300,48 +282,14 @@ namespace UDrawSystemCS.UDraw
          */
         public void init()
         {
-            mPageList = new Dictionary<int, Dictionary<int, DrawList>>();
-
-            // デフォルトのページを設定
-            setCurrentPage(mCurrentPage);
+            mDrawList = new Dictionary<int, DrawList>();
         }
-
-        public void initPage(int page)
+        
+        public void initDrawList()
         {
-            Dictionary<int, DrawList> lists = mPageList[page];
-            if (lists != null)
-            {
-                lists.Clear();
-            }
+            mDrawList.Clear();
         }
-
-        /**
-         * ページを切り替える
-         * @param page 切り替え先のページ 0ならデフォルトのページ
-         */
-        public void setCurrentPage(int page)
-        {
-            // 古いページの削除リクエストを処理する
-            removeRequestedList();
-
-            // ページリストが存在しなら作成する
-            if (!mPageList.ContainsKey(page))
-            {
-                Dictionary<int, DrawList> lists = new Dictionary<int, DrawList>();
-                mPageList.Add(page, lists);
-            }
-
-            this.mCurrentPage = page;
-        }
-
-        /**
-         * カレントページのリストを取得
-         */
-        private Dictionary<int, DrawList> getCurrentDrawLists()
-        {
-            return mPageList[mCurrentPage];
-        }
-
+        
         /**
          * 描画オブジェクトを追加
          * @param obj
@@ -355,17 +303,22 @@ namespace UDrawSystemCS.UDraw
         public DrawList addDrawable(UDrawable obj)
         {
             // カレントページのリストを取得
-            Dictionary<int, DrawList> lists = getCurrentDrawLists();
+            Dictionary<int, DrawList> lists = mDrawList;
 
             // 挿入するリストを探す
             int _priority = obj.getDrawPriority();
-            DrawList list = lists[_priority];
-            if (list == null)
+            DrawList list;
+            if (lists.ContainsKey(_priority) == false)
             {
                 // まだ存在していないのでリストを生成
                 list = new DrawList(obj.getDrawPriority());
                 lists.Add(_priority, list);
             }
+            else
+            {
+                list = lists[_priority];
+            }
+            
             list.add(obj);
             obj.setDrawList(list);
             return list;
@@ -387,7 +340,7 @@ namespace UDrawSystemCS.UDraw
          */
         private void removeRequestedList()
         {
-            Dictionary<int, DrawList> lists = getCurrentDrawLists();
+            Dictionary<int, DrawList> lists = mDrawList;
             if (lists == null) return;
 
             foreach (UDrawable obj in removeRequest)
@@ -408,7 +361,7 @@ namespace UDrawSystemCS.UDraw
          */
         public void removeWithPriority(int priority)
         {
-            Dictionary<int, DrawList> lists = getCurrentDrawLists();
+            Dictionary<int, DrawList> lists = mDrawList;
 
             lists.Remove(priority);
         }
@@ -420,7 +373,7 @@ namespace UDrawSystemCS.UDraw
          */
         public void setPriority(DrawList list1, int priority)
         {
-            Dictionary<int, DrawList> lists = getCurrentDrawLists();
+            Dictionary<int, DrawList> lists = mDrawList;
 
             // 変更先のプライオリティーを持つリストを探す
             int _priority = priority;
@@ -446,7 +399,7 @@ namespace UDrawSystemCS.UDraw
          */
         public void setPriority(UDrawable obj, int priority)
         {
-            Dictionary<int, DrawList> lists = getCurrentDrawLists();
+            Dictionary<int, DrawList> lists = mDrawList;
 
             // 探す
             foreach (int pri in lists.Keys)
@@ -478,7 +431,7 @@ namespace UDrawSystemCS.UDraw
         public bool draw(Graphics g)
         {
             bool redraw = false;
-            Dictionary<int, DrawList> lists = getCurrentDrawLists();
+            Dictionary<int, DrawList> lists = mDrawList;
 
             // 削除要求のかかったオブジェクトを削除する
             removeRequestedList();
@@ -498,21 +451,17 @@ namespace UDrawSystemCS.UDraw
                 }
             }
 
-            ULog.startCount(TAG);
-
 
             // 奥から描画するので、キーが大きい（優先度が低い）順で描画（キーを降順で描画）
-            IOrderedEnumerable<KeyValuePair<int, DrawList>> descendingList =
-                lists.OrderByDescending(selector =>
-                {
-                    if (lists[selector.Key].draw(g))
-                    {
-                        redraw = true;
-                    }
-                    return selector.Key;
-                });
+            List<int> _list = lists.Keys.ToList<int>();
 
-            ULog.showCount(TAG);
+            // 降順ソート
+            _list.Sort((a, b) => b - a);
+
+            foreach(int key in _list)
+            {
+                lists[key].draw(g);
+            }
 
             drawDebugPoint(g);
 
@@ -527,26 +476,31 @@ namespace UDrawSystemCS.UDraw
          */
         public bool touchEvent(ViewTouch vt)
         {
-            Dictionary<int, DrawList> lists = getCurrentDrawLists();
+            Dictionary<int, DrawList> lists = mDrawList;
 
             bool isRedraw = false;
-            foreach (DrawList list in lists.Values)
+            
+            //foreach (DrawList list in lists.Values)
+            //{
+            //    if (list.touchUpEvent(vt))
+            //    {
+            //        // タッチアップイベントは全てのオブジェクトで処理する
+            //        isRedraw = true;
+            //    }
+            //}
+
+            if (vt.MEvent == MouseEvent.Down)
             {
-                if (list.touchUpEvent(vt))
+                foreach (DrawList list in lists.Values)
                 {
-                    // タッチアップイベントは全てのオブジェクトで処理する
-                    isRedraw = true;
+                    if (list.touchEvent(vt))
+                    {
+                        // その他のタッチイベントはtrueが返った時点で打ち切り
+                        return true;
+                    }
                 }
             }
 
-            foreach (DrawList list in lists.Values)
-            {
-                if (list.touchEvent(vt))
-                {
-                    // その他のタッチイベントはtrueが返った時点で打ち切り
-                    return true;
-                }
-            }
             return isRedraw;
         }
 
@@ -556,7 +510,7 @@ namespace UDrawSystemCS.UDraw
         public void showAllList(bool ascending, bool isShowOnly)
         {
             // カレントページのリストを取得
-            Dictionary<int, DrawList> lists = getCurrentDrawLists();
+            Dictionary<int, DrawList> lists = mDrawList;
 
             ULog.print(TAG, " ++ showAllList ++");
 

@@ -318,20 +318,8 @@ namespace UDrawSystemCS.UView
             return this.touchEvent(vt, PointF.Empty);
         }
 
-        public bool touchEvent(ViewTouch vt, PointF offset)
+        override public bool touchEvent(ViewTouch vt, PointF offset)
         {
-            if (vt.type == TouchType.Touch)
-            {
-                if (offset == PointF.Empty)
-                {
-                    offset = new PointF();
-                }
-                if (getRect().Contains((int)vt.touchX2(offset.X), (int)vt.touchY2(offset.Y)))
-                {
-                    isOpened = !isOpened;
-                    return true;
-                }
-            }
             return false;
         }
     }

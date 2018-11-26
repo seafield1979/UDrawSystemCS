@@ -55,6 +55,16 @@ namespace UDrawSystemCS
             {
                 case "101":
                     drawMode = EDrawMode.Draw1;
+                    drawManager.initDrawList();
+                    UDrawable obj = new UDrawableRect(10, 100, 100, 100, 100);
+                    obj.Color = Color.Yellow;
+                    obj.drawPriority = 100;
+                    drawManager.addDrawable(obj);
+
+                    UDrawable obj2 = new UDrawableRect(10, 150, 150, 100, 100);
+                    obj2.Color = Color.Orange;
+                    obj2.drawPriority = 1;
+                    drawManager.addDrawable(obj2);
                     break;
                 case "102":
                     drawMode = EDrawMode.Draw2;
@@ -102,7 +112,8 @@ namespace UDrawSystemCS
             switch (drawMode)
             {
                 case EDrawMode.Draw1:
-                    DrawDraw1(g);
+                    //DrawDraw1(g);
+                    drawManager.draw(g);
                     break;
                 case EDrawMode.Draw2:
                     DrawDraw2(g);
@@ -134,6 +145,9 @@ namespace UDrawSystemCS
         #region メソッド
         private void Initialize()
         {
+            // treeのノードを開く
+            treeView1.ExpandAll();
+
             drawMode = EDrawMode.Draw1;
 
             ULog.init();
@@ -141,6 +155,7 @@ namespace UDrawSystemCS
             vt = new ViewTouch();
 
             drawManager = new UDrawManager();
+            drawManager.init();
             
         }
         #endregion メソッド
@@ -165,22 +180,34 @@ namespace UDrawSystemCS
         #region Mouseイベント
         private void panel2_MouseDown(object sender, MouseEventArgs e)
         {
-            vt.checkTouchType(MouseEvent.Down, e);
+            Console.WriteLine( "x:" + e.Location.X + " y:" + e.Location.Y);
+
+            vt.args = e;
+            vt.MEvent = MouseEvent.Down;
+            drawManager.touchEvent(vt);
         }
         
         private void panel2_MouseMove(object sender, MouseEventArgs e)
         {
-            vt.checkTouchType(MouseEvent.Move, e);
+            vt.args = e;
+            vt.MEvent = MouseEvent.Move;
+            
+            drawManager.touchEvent(vt);
         }
 
         private void panel2_MouseUp(object sender, MouseEventArgs e)
         {
-            vt.checkTouchType(MouseEvent.Up, e);
+            vt.args = e;
+            vt.MEvent = MouseEvent.Up;
+
+            drawManager.touchEvent(vt);
         }
 
         private void panel2_MouseLeave(object sender, EventArgs e)
         {
-            vt.checkTouchType(MouseEvent.Cancel, null);
+            vt.MEvent = MouseEvent.Cancel;
+
+            drawManager.touchEvent(vt);
         }
 
         #endregion Mouseイベント

@@ -377,21 +377,21 @@ namespace UDrawSystemCS.UView.ScrollBar
          */
         public bool touchEvent(ViewTouch tv, PointF offset)
         {
-            switch (tv.type)
+            switch (tv.MEvent)
             {
-                case TouchType.Touch:
+                case MouseEvent.Down:
                     if (touchDown(tv, offset))
                     {
                         return true;
                     }
                     break;
-                case TouchType.Moving:
+                case MouseEvent.Move:
                     if (touchMove(tv))
                     {
                         return true;
                     }
                     break;
-                case TouchType.MoveEnd:
+                case MouseEvent.Up:
                     touchUp();
                     break;
             }
@@ -406,71 +406,71 @@ namespace UDrawSystemCS.UView.ScrollBar
         private bool touchDown(ViewTouch vt, PointF offset)
         {
             // スペース部分をタッチしたら１画面分スクロール
-            float ex = vt.touchX - offset.X;
-            float ey = vt.touchY - offset.Y;
+            //float ex = vt.touchX - offset.X;
+            //float ey = vt.touchY - offset.Y;
 
-            RectangleF rect;
-            if (type == ScrollBarType.Vertical)
-            {
-                rect = new RectangleF(pos.X - TOUCH_MARGIN, pos.Y,
-                            pos.X + bgWidth + TOUCH_MARGIN, pos.Y + bgLength);
-                if (rect.Left <= ex && ex < rect.Right &&
-                        rect.Top <= ey && ey < rect.Bottom)
-                {
-                    if (ey < barPos)
-                    {
-                        // 上にスクロール
-                        //ULog.print(TAG, "Scroll Up");
-                        scrollUp();
-                        return true;
-                    }
-                    else if (ey > pos.Y + barPos + barLength)
-                    {
-                        // 下にスクロール
-                        //ULog.print(TAG, "Scroll Down");
-                        scrollDown();
-                        return true;
-                    }
-                    else
-                    {
-                        // バー
-                        //ULog.print(TAG, "Drag Start");
-                        isDraging = true;
-                        return true;
-                    }
-                }
-            }
-            else
-            {
-                rect = new RectangleF(pos.X, pos.Y - TOUCH_MARGIN,
-                        pos.X + bgLength, pos.Y + bgWidth);
+            //RectangleF rect;
+            //if (type == ScrollBarType.Vertical)
+            //{
+            //    rect = new RectangleF(pos.X - TOUCH_MARGIN, pos.Y,
+            //                pos.X + bgWidth + TOUCH_MARGIN, pos.Y + bgLength);
+            //    if (rect.Left <= ex && ex < rect.Right &&
+            //            rect.Top <= ey && ey < rect.Bottom)
+            //    {
+            //        if (ey < barPos)
+            //        {
+            //            // 上にスクロール
+            //            //ULog.print(TAG, "Scroll Up");
+            //            scrollUp();
+            //            return true;
+            //        }
+            //        else if (ey > pos.Y + barPos + barLength)
+            //        {
+            //            // 下にスクロール
+            //            //ULog.print(TAG, "Scroll Down");
+            //            scrollDown();
+            //            return true;
+            //        }
+            //        else
+            //        {
+            //            // バー
+            //            //ULog.print(TAG, "Drag Start");
+            //            isDraging = true;
+            //            return true;
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    rect = new RectangleF(pos.X, pos.Y - TOUCH_MARGIN,
+            //            pos.X + bgLength, pos.Y + bgWidth);
 
-                if (rect.Left <= ex && ex < rect.Right &&
-                        rect.Top <= ey && ey < rect.Bottom)
-                {
-                    if (ex < barPos)
-                    {
-                        // 上にスクロール
-                        ULog.print(TAG, "Scroll Up");
-                        scrollUp();
-                        return true;
-                    }
-                    else if (ex > pos.X + barPos + barLength)
-                    {
-                        // 下にスクロール
-                        ULog.print(TAG, "Scroll Down");
-                        scrollDown();
-                        return true;
-                    }
-                    else
-                    {
-                        // バー
-                        ULog.print(TAG, "Drag Start");
-                        isDraging = true;
-                        return true;
-                    }
-                }
-            }
+            //    if (rect.Left <= ex && ex < rect.Right &&
+            //            rect.Top <= ey && ey < rect.Bottom)
+            //    {
+            //        if (ex < barPos)
+            //        {
+            //            // 上にスクロール
+            //            ULog.print(TAG, "Scroll Up");
+            //            scrollUp();
+            //            return true;
+            //        }
+            //        else if (ex > pos.X + barPos + barLength)
+            //        {
+            //            // 下にスクロール
+            //            ULog.print(TAG, "Scroll Down");
+            //            scrollDown();
+            //            return true;
+            //        }
+            //        else
+            //        {
+            //            // バー
+            //            ULog.print(TAG, "Drag Start");
+            //            isDraging = true;
+            //            return true;
+            //        }
+            //    }
+            //}
             return false;
         }
 
@@ -484,12 +484,12 @@ namespace UDrawSystemCS.UView.ScrollBar
 
         private bool touchMove(ViewTouch vt)
         {
-            if (isDraging)
-            {
-                float move = (type == ScrollBarType.Vertical) ? vt.getMoveY() : vt.getMoveX();
-                barMove(move);
-                return true;
-            }
+            //if (isDraging)
+            //{
+            //    float move = (type == ScrollBarType.Vertical) ? vt.getMoveY() : vt.getMoveX();
+            //    barMove(move);
+            //    return true;
+            //}
             return false;
         }
     }

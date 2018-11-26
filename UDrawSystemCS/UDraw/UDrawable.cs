@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Windows.Forms;
 using UDrawSystemCS.UView;
 using UDrawSystemCS.UUtil;
 
@@ -32,7 +33,6 @@ namespace UDrawSystemCS.UDraw
         protected PointF pos = new PointF();
         protected Size size = new Size();
         protected Rectangle rect = new Rectangle();
-        protected Color color;
         public int drawPriority;     // DrawManagerに渡す描画優先度
 
         // 自動移動、サイズ変更、色変更
@@ -57,6 +57,15 @@ namespace UDrawSystemCS.UDraw
 
         protected Size srcSize = new Size();
         protected Size dstSize = new Size();
+
+        protected Color color;
+
+        public Color Color
+        {
+            get { return color; }
+            set { color = value; }
+        }
+
 
         // アニメーション用
         public const int ANIME_FRAME = 20;
@@ -173,33 +182,29 @@ namespace UDrawSystemCS.UDraw
             rect.Height = (int)( size.Height + _scaleH);
         }
 
-        public float getRight()
+        
+        public float Right
         {
-            return pos.X + size.Width;
-        }
-        public float getBottom()
-        {
-            return pos.Y + size.Height;
+            get { return pos.X + size.Width; }
         }
 
-        public int getWidth()
+        public float Bottom
         {
-            return size.Width;
-        }
-        public void setWidth(int w)
-        {
-            size.Width = w;
+            get { return pos.Y + size.Height; }
         }
 
-        public int getHeight()
+        public int Width
         {
-            return size.Height;
-        }
-        public void setHeight(int h)
-        {
-            size.Height = h;
+            get { return size.Width; }
+            set { size.Width = value; }
         }
 
+        public int Height
+        {
+            get { return size.Height; }
+            set { size.Height = value; }
+        }
+        
         public void setSize(int width, int height)
         {
             size.Width = width;
@@ -226,17 +231,7 @@ namespace UDrawSystemCS.UDraw
                     rect.Bottom + (int)offset.Y + frameWidth);
         }
 
-        public Color getColor()
-        {
-            return color;
-        }
-        public void setColor(Color color)
-        {
-            this.color = color;
-        }
-
         
-
 
         /**
          * 後処理。nullを設定する前に呼ぶ
@@ -281,14 +276,14 @@ namespace UDrawSystemCS.UDraw
          * @param vt
          * @return
          */
-        public bool touchUpEvent(ViewTouch vt) { return false; }
+        virtual public bool touchUpEvent(ViewTouch vt) { return false; }
 
         /**
          * タッチ処理
          * @param vt
          * @return
          */
-        public bool touchEvent(ViewTouch vt, PointF offset)
+        virtual public bool touchEvent(ViewTouch vt, PointF offset)
         {
             return false;
         }

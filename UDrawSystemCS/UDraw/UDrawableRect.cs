@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Windows.Forms;
 using UDrawSystemCS.UView;
 
 namespace UDrawSystemCS.UDraw
@@ -28,10 +29,7 @@ namespace UDrawSystemCS.UDraw
          */
         override public void draw(Graphics g, PointF offset)
         {
-            // todo
-            //paint.setColor(color);
-            //paint.setStyle(Paint.Style.FILL);
-            //canvas.drawRect(pos.x, pos.y, pos.x + size.width, pos.y + size.height, paint);
+            g.FillRectangle(new SolidBrush(color), pos.X, pos.Y, size.Width, size.Height);
         }
 
         /**
@@ -39,8 +37,16 @@ namespace UDrawSystemCS.UDraw
          * @param vt
          * @return
          */
-        public bool touchEvent(ViewTouch vt, PointF offset)
+        override public bool touchEvent(ViewTouch vt, PointF offset)
         {
+            Point mpos = vt.args.Location;
+            // 領域内をマウスダウンしたらtrueを返す
+            if (pos.X <= mpos.X && mpos.X <= pos.X + Width && 
+                pos.Y <= mpos.Y && mpos.Y <= pos.Y + Height )
+            {
+                System.Console.WriteLine("touch UDrawRectangle");
+                return true;
+            }
             return false;
         }
     }

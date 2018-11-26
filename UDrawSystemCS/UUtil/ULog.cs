@@ -100,63 +100,7 @@ namespace UDrawSystemCS.UUtil
                 }
             }
         }
-
-        /**
-         * カウントする
-         * start - count ... - end
-         */
-        public static void startCount(String tag)
-        {
-            if (!isCount) return;
-
-            counters.Add(tag, 0);
-        }
-        public static void startAllCount()
-        {
-            if (!isCount) return;
-
-            foreach (String tag in counters.Keys)
-            {
-                counters.Add(tag, 0);
-            }
-        }
-        public static void count(String tag)
-        {
-            if (!isCount) return;
-
-            int count = counters[tag];
-            if (count == null)
-            {
-                count = 0;
-            }
-            count = count + 1;
-            counters.Add(tag, count);
-        }
-        public static void showCount(String tag)
-        {
-            if (!isCount) return;
-
-            // 有効無効判定
-            bool enable = enables[tag];
-            if (!enable)
-            {
-                // 出力しない
-            }
-            else
-            {
-                ULog.print(tag, "count:" + counters[tag]);
-            }
-        }
-        public static void showAllCount()
-        {
-            if (!isCount) return;
-
-            foreach (String tag in counters.Keys)
-            {
-                showCount(tag);
-            }
-        }
-
+        
 
         /**
          * Static Methods
