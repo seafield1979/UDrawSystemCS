@@ -54,17 +54,22 @@ namespace UDrawSystemCS
             switch (e.Node.Tag)
             {
                 case "101":
-                    drawMode = EDrawMode.Draw1;
-                    drawManager.initDrawList();
-                    UDrawable obj = new UDrawableRect(10, 100, 100, 100, 100);
-                    obj.Color = Color.Yellow;
-                    obj.drawPriority = 100;
-                    drawManager.addDrawable(obj);
+                    {
+                        drawMode = EDrawMode.Draw1;
+                        drawManager.initDrawList();
+                        UDrawable obj = new UDrawableRect(100,  "rect1", 100, 100, 100, 100);
+                        obj.Color = Color.Yellow;
+                        drawManager.addDrawable(obj);
 
-                    UDrawable obj2 = new UDrawableRect(10, 150, 150, 100, 100);
-                    obj2.Color = Color.Orange;
-                    obj2.drawPriority = 1;
-                    drawManager.addDrawable(obj2);
+                        UDrawable obj3 = new UDrawableRect(1, "rect2", 200, 200, 100, 100);
+                        obj3.Color = Color.Gray;
+                        drawManager.addDrawable(obj3);
+
+                        UDrawable obj2 = new UDrawableRect(1, "rect3", 150, 150, 100, 100);
+                        obj2.Color = Color.Orange;
+                        drawManager.addDrawable(obj2);
+
+                    }
                     break;
                 case "102":
                     drawMode = EDrawMode.Draw2;
@@ -113,7 +118,10 @@ namespace UDrawSystemCS
             {
                 case EDrawMode.Draw1:
                     //DrawDraw1(g);
-                    drawManager.draw(g);
+                    if (drawManager.draw(g))
+                    {
+                        panel2.Invalidate();
+                    }
                     break;
                 case EDrawMode.Draw2:
                     DrawDraw2(g);
@@ -184,7 +192,10 @@ namespace UDrawSystemCS
 
             vt.args = e;
             vt.MEvent = MouseEvent.Down;
-            drawManager.touchEvent(vt);
+            if (drawManager.touchEvent(vt))
+            {
+                panel2.Invalidate();
+            }
         }
         
         private void panel2_MouseMove(object sender, MouseEventArgs e)
@@ -192,7 +203,10 @@ namespace UDrawSystemCS
             vt.args = e;
             vt.MEvent = MouseEvent.Move;
             
-            drawManager.touchEvent(vt);
+            if (drawManager.touchEvent(vt))
+            {
+                panel2.Invalidate();
+            }
         }
 
         private void panel2_MouseUp(object sender, MouseEventArgs e)
@@ -200,14 +214,21 @@ namespace UDrawSystemCS
             vt.args = e;
             vt.MEvent = MouseEvent.Up;
 
-            drawManager.touchEvent(vt);
+
+            if (drawManager.touchEvent(vt))
+            {
+                panel2.Invalidate();
+            }
         }
 
         private void panel2_MouseLeave(object sender, EventArgs e)
         {
             vt.MEvent = MouseEvent.Cancel;
 
-            drawManager.touchEvent(vt);
+            if (drawManager.touchEvent(vt))
+            {
+                panel2.Invalidate();
+            }
         }
 
         #endregion Mouseイベント

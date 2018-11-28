@@ -74,7 +74,7 @@ namespace UDrawSystemCS.UView
                          bool multiLine, bool isDrawBG, bool marginH,
                          float x, float y,
                          int width,
-                         Color color, Color bgColor) : base(priority, x, y, width, textSize)
+                         Color color, Color bgColor) : base(priority, text, x, y, width, textSize)
         {
             
             this.text = text;

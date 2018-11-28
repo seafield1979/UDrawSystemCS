@@ -94,7 +94,10 @@ namespace UDrawSystemCS.UDraw
             bool allDone = true;
             foreach (UDrawable obj in list)
             {
-
+                if (obj.autoMoving())
+                {
+                    allDone = false;
+                }
                 if (obj.animate())
                 {
                     allDone = false;
@@ -245,7 +248,7 @@ namespace UDrawSystemCS.UDraw
 
         // デバッグ用のポイント描画
         private static LinkedList<DebugPoint> debugPoints = new LinkedList<DebugPoint>();
-        private static Dictionary<int, DebugPoint> debugPoints2 = new Dictionary<int, DebugPoint>();
+        private static SortedDictionary<int, DebugPoint> debugPoints2 = new SortedDictionary<int, DebugPoint>();
 
         /**
          * Member variable
@@ -256,7 +259,7 @@ namespace UDrawSystemCS.UDraw
 
         // ページのリスト
         //private Dictionary<int, Dictionary<int, DrawList>> mPageList;
-        private Dictionary<int, DrawList> mDrawList;
+        private SortedDictionary<int, DrawList> mDrawList;
 
         // カレントページ
         private int mCurrentPage = DEFAULT_PAGE;
@@ -282,7 +285,7 @@ namespace UDrawSystemCS.UDraw
          */
         public void init()
         {
-            mDrawList = new Dictionary<int, DrawList>();
+            mDrawList = new SortedDictionary<int, DrawList>();
         }
         
         public void initDrawList()
@@ -303,7 +306,7 @@ namespace UDrawSystemCS.UDraw
         public DrawList addDrawable(UDrawable obj)
         {
             // カレントページのリストを取得
-            Dictionary<int, DrawList> lists = mDrawList;
+            SortedDictionary<int, DrawList> lists = mDrawList;
 
             // 挿入するリストを探す
             int _priority = obj.getDrawPriority();
@@ -340,7 +343,7 @@ namespace UDrawSystemCS.UDraw
          */
         private void removeRequestedList()
         {
-            Dictionary<int, DrawList> lists = mDrawList;
+            SortedDictionary<int, DrawList> lists = mDrawList;
             if (lists == null) return;
 
             foreach (UDrawable obj in removeRequest)
@@ -361,7 +364,7 @@ namespace UDrawSystemCS.UDraw
          */
         public void removeWithPriority(int priority)
         {
-            Dictionary<int, DrawList> lists = mDrawList;
+            SortedDictionary<int, DrawList> lists = mDrawList;
 
             lists.Remove(priority);
         }
@@ -373,7 +376,7 @@ namespace UDrawSystemCS.UDraw
          */
         public void setPriority(DrawList list1, int priority)
         {
-            Dictionary<int, DrawList> lists = mDrawList;
+            SortedDictionary<int, DrawList> lists = mDrawList;
 
             // 変更先のプライオリティーを持つリストを探す
             int _priority = priority;
@@ -399,7 +402,7 @@ namespace UDrawSystemCS.UDraw
          */
         public void setPriority(UDrawable obj, int priority)
         {
-            Dictionary<int, DrawList> lists = mDrawList;
+            SortedDictionary<int, DrawList> lists = mDrawList;
 
             // 探す
             foreach (int pri in lists.Keys)
@@ -431,7 +434,7 @@ namespace UDrawSystemCS.UDraw
         public bool draw(Graphics g)
         {
             bool redraw = false;
-            Dictionary<int, DrawList> lists = mDrawList;
+            SortedDictionary<int, DrawList> lists = mDrawList;
 
             // 削除要求のかかったオブジェクトを削除する
             removeRequestedList();
@@ -460,7 +463,10 @@ namespace UDrawSystemCS.UDraw
 
             foreach(int key in _list)
             {
-                lists[key].draw(g);
+                if (lists[key].draw(g))
+                {
+                    redraw = true;
+                }
             }
 
             drawDebugPoint(g);
@@ -476,19 +482,10 @@ namespace UDrawSystemCS.UDraw
          */
         public bool touchEvent(ViewTouch vt)
         {
-            Dictionary<int, DrawList> lists = mDrawList;
+            SortedDictionary<int, DrawList> lists = mDrawList;
 
             bool isRedraw = false;
             
-            //foreach (DrawList list in lists.Values)
-            //{
-            //    if (list.touchUpEvent(vt))
-            //    {
-            //        // タッチアップイベントは全てのオブジェクトで処理する
-            //        isRedraw = true;
-            //    }
-            //}
-
             if (vt.MEvent == MouseEvent.Down)
             {
                 foreach (DrawList list in lists.Values)
@@ -510,7 +507,7 @@ namespace UDrawSystemCS.UDraw
         public void showAllList(bool ascending, bool isShowOnly)
         {
             // カレントページのリストを取得
-            Dictionary<int, DrawList> lists = mDrawList;
+            SortedDictionary<int, DrawList> lists = mDrawList;
 
             ULog.print(TAG, " ++ showAllList ++");
 

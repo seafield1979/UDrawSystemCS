@@ -27,12 +27,19 @@ namespace UDrawSystemCS.UDraw
         public static double RAD = 3.1415 / 180.0;
 
         /**
+         * Static variables
+         */
+        protected static Font debugFont = new Font("MS UI Gothic", 10);
+        protected static Brush debugBrush = Brushes.Black;
+
+        /**
          * Member variables
          */
         protected DrawList drawList;    // DrawManagerに描画登録するとnull以外になる
         protected PointF pos = new PointF();
         protected Size size = new Size();
         protected Rectangle rect = new Rectangle();
+        protected string name;
         public int drawPriority;     // DrawManagerに渡す描画優先度
 
         // 自動移動、サイズ変更、色変更
@@ -81,8 +88,9 @@ namespace UDrawSystemCS.UDraw
         protected int animeFrameMax;
         protected float animeRatio;
 
-        public UDrawable(int priority, float x, float y, int width, int height)
+        public UDrawable(int priority, string name, float x, float y, int width, int height)
         {
+            this.name = name;
             this.setPos(x, y);
             this.setSize(width, height);
             updateRect();

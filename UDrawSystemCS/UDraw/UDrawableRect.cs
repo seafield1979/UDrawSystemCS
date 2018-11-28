@@ -9,14 +9,14 @@ namespace UDrawSystemCS.UDraw
         /**
          * Constructor
          */
-        public UDrawableRect(int priority, float x, float y, int width, int height) : base(priority, x, y, width, height)
+        public UDrawableRect(int priority, string name, float x, float y, int width, int height) : base(priority, name, x, y, width, height)
         {   
         }
 
-        public static UDrawableRect createInstance(int priority, float x, float y, int width, int
+        public static UDrawableRect createInstance(int priority, string name, float x, float y, int width, int
                 height, Color color)
         {
-            UDrawableRect instance = new UDrawableRect(priority, x, y, width, height);
+            UDrawableRect instance = new UDrawableRect(priority, name, x, y, width, height);
             instance.color = color;
             return instance;
         }
@@ -30,6 +30,9 @@ namespace UDrawSystemCS.UDraw
         override public void draw(Graphics g, PointF offset)
         {
             g.FillRectangle(new SolidBrush(color), pos.X, pos.Y, size.Width, size.Height);
+#if DEBUG && true
+            g.DrawString(this.name, debugFont, debugBrush, this.pos.X, this.pos.Y);
+#endif
         }
 
         /**
@@ -44,7 +47,10 @@ namespace UDrawSystemCS.UDraw
             if (pos.X <= mpos.X && mpos.X <= pos.X + Width && 
                 pos.Y <= mpos.Y && mpos.Y <= pos.Y + Height )
             {
-                System.Console.WriteLine("touch UDrawRectangle");
+                System.Console.WriteLine("touch UDrawRectangle:" + name);
+
+                this.startMoving(0, 0, 100);
+
                 return true;
             }
             return false;
