@@ -46,13 +46,20 @@ namespace UDrawSystemCS.UDraw
         protected bool isMoving;
         protected bool isMovingPos;
         protected bool isMovingSize;
-
+        
         protected bool _isShow;
-
         public bool isShow
         {
             get { return _isShow; }
             set { _isShow = value; }
+        }
+
+        // ホバーかどうか(マウスカーソルがあった状態)
+        protected bool isHover;
+        public bool IsHover
+        {
+            get { return isHover; }
+            set { isHover = value; }
         }
 
         protected MovingType movingType;
@@ -251,9 +258,9 @@ namespace UDrawSystemCS.UDraw
 
         /**
          * 描画処理
-         * @param canvas
-         * @param paint
+         * @param g
          * @param offset 独自の座標系を持つオブジェクトをスクリーン座標系に変換するためのオフセット値
+         * @param isHover ホバー状態ならtrue
          */
         abstract public void draw(Graphics g, PointF offset);
 
@@ -289,10 +296,13 @@ namespace UDrawSystemCS.UDraw
         /**
          * タッチ処理
          * @param vt
+         * @param offset
+         * @param isHover  ホバーならtureを返す
          * @return
          */
-        virtual public bool touchEvent(ViewTouch vt, PointF offset)
+        virtual public bool touchEvent(ViewTouch vt, PointF offset, out bool isHover)
         {
+            isHover = false;
             return false;
         }
 

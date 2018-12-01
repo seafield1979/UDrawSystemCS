@@ -178,10 +178,12 @@ namespace UDrawSystemCS.UDraw
          * @param vt
          * @return true:再描画
          */
-        public bool touchEvent(ViewTouch vt)
+        public bool touchEvent(ViewTouch vt, out UDrawable hoverObj)
         {
             UDrawManager manager = UDrawManager.getInstance();
             bool ret = false;
+            bool isHover;
+            hoverObj = null;
 
             // 手前に表示されたものから処理したいのでリストを逆順で処理する
             list.Reverse();
@@ -192,9 +194,13 @@ namespace UDrawSystemCS.UDraw
                     continue;
                 }
                 PointF offset = obj.getDrawOffset();
-
-                if (obj.touchEvent(vt, offset))
+                
+                if (obj.touchEvent(vt, offset, out isHover))
                 {
+                    if (isHover)
+                    {
+                        hoverObj = obj;
+                    }
                     ret = true;
                     break;
                 }
@@ -235,8 +241,8 @@ namespace UDrawSystemCS.UDraw
     class UDrawManager
     {
         /**
-     * Constants
-     */
+         * Constants
+         */
         public const String TAG = "UDrawManager";
         private const int DEFAULT_PAGE = 1;
 
@@ -257,14 +263,18 @@ namespace UDrawSystemCS.UDraw
         // タッチを放すまで他のオブジェクトのタッチ処理はしない
         private UDrawable touchingObj;
 
-        // ページのリスト
-        //private Dictionary<int, Dictionary<int, DrawList>> mPageList;
+        // 描画オブジェクトの描画プライオリティ別リスト(辞書型)
         private SortedDictionary<int, DrawList> mDrawList;
-
-        // カレントページ
-        private int mCurrentPage = DEFAULT_PAGE;
-
+        
         private LinkedList<UDrawable> removeRequest = new LinkedList<UDrawable>();
+
+        // ホバーオブジェクト(1つだけ)
+        private UDrawable hoverObj;
+        public UDrawable HoverObj
+        {
+            get { return hoverObj; }
+            set { hoverObj = value; }
+        }
 
         /**
          * Get/Set
@@ -439,6 +449,11 @@ namespace UDrawSystemCS.UDraw
             // 削除要求のかかったオブジェクトを削除する
             removeRequestedList();
 
+            //if (hoverObj != null)
+            //{
+            //    hoverObj.IsHover = ture;
+            //}
+
             foreach (DrawList list in lists.Values)
             {
                 // 毎フレームの処理
@@ -484,21 +499,38 @@ namespace UDrawSystemCS.UDraw
         {
             SortedDictionary<int, DrawList> lists = mDrawList;
 
-            bool isRedraw = false;
-            
-            if (vt.MEvent == MouseEvent.Down)
+            // １つ前のフレームのホバーオブジェクトを開放する
+            UDrawable oldHoverObj = hoverObj;
+            if (hoverObj != null)
             {
+                hoverObj.IsHover = false;
+                hoverObj = null;
+            }
+            
+            //if (vt.MEvent == MouseEvent.Down)
+            {
+                UDrawable _hoverObj;
                 foreach (DrawList list in lists.Values)
                 {
-                    if (list.touchEvent(vt))
+                    if (list.touchEvent(vt, out _hoverObj))
                     {
                         // その他のタッチイベントはtrueが返った時点で打ち切り
+                        if (_hoverObj != null)
+                        {
+                            hoverObj = _hoverObj;
+                            hoverObj.IsHover = true;
+                        }
+                        
                         return true;
                     }
                 }
             }
+            if (oldHoverObj != hoverObj)
+            {
+                return true;
+            }
 
-            return isRedraw;
+            return false;
         }
 
         /**

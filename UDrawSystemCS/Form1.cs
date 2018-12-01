@@ -234,4 +234,12 @@ namespace UDrawSystemCS
         #endregion Mouseイベント
 
     }
+
+    public class DoubleBufferingPanel : System.Windows.Forms.Panel
+    {
+        public DoubleBufferingPanel()
+        {
+            this.DoubleBuffered = true;
+        }
+    }
 }

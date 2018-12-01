@@ -29,7 +29,21 @@ namespace UDrawSystemCS.UDraw
          */
         override public void draw(Graphics g, PointF offset)
         {
-            g.FillRectangle(new SolidBrush(color), pos.X, pos.Y, size.Width, size.Height);
+            Color _color;
+            if (isAnimating)
+            {
+                _color = Color.FromArgb((int)(animeRatio * 128.0f), color);
+            }
+            else if (isHover)
+            {
+                _color = Color.FromArgb(64, color);
+            }
+            else
+            {
+                _color = Color;
+            }
+
+            g.FillRectangle(new SolidBrush(_color), pos.X, pos.Y, size.Width, size.Height);
 #if DEBUG && true
             g.DrawString(this.name, debugFont, debugBrush, this.pos.X, this.pos.Y);
 #endif
@@ -40,16 +54,28 @@ namespace UDrawSystemCS.UDraw
          * @param vt
          * @return
          */
-        override public bool touchEvent(ViewTouch vt, PointF offset)
+        override public bool touchEvent(ViewTouch vt, PointF offset, out bool isHover)
         {
             Point mpos = vt.args.Location;
+
+            isHover = false;
             // 領域内をマウスダウンしたらtrueを返す
             if (pos.X <= mpos.X && mpos.X <= pos.X + Width && 
                 pos.Y <= mpos.Y && mpos.Y <= pos.Y + Height )
             {
-                System.Console.WriteLine("touch UDrawRectangle:" + name);
-
-                this.startMoving(0, 0, 100);
+                switch(vt.MEvent)
+                {
+                    case MouseEvent.Click:
+                        // クリック時の処理
+                        System.Console.WriteLine("touch UDrawRectangle:" + name);
+                        this.startAnimation(100);
+                        return true;
+                    case MouseEvent.Move:
+                        // ホバー時の処理
+                        isHover = true;
+                        return true;
+                }
+                
 
                 return true;
             }

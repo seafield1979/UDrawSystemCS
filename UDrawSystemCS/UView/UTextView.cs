@@ -315,11 +315,12 @@ namespace UDrawSystemCS.UView
          */
         public bool touchEvent(ViewTouch vt)
         {
-            return this.touchEvent(vt, PointF.Empty);
+            return this.touchEvent(vt, PointF.Empty, out bool isHover);
         }
 
-        override public bool touchEvent(ViewTouch vt, PointF offset)
+        override public bool touchEvent(ViewTouch vt, PointF offset, out bool isHover)
         {
+            isHover = false;
             return false;
         }
     }

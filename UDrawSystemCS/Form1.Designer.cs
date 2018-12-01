@@ -59,7 +59,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.splitter1 = new System.Windows.Forms.Splitter();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.panel2 = new DoubleBufferingPanel();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -171,7 +171,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.Splitter splitter1;
-        private System.Windows.Forms.Panel panel2;
+        private DoubleBufferingPanel panel2;
     }
 }
 
