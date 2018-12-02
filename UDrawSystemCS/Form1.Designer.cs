@@ -59,7 +59,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.splitter1 = new System.Windows.Forms.Splitter();
-            this.panel2 = new DoubleBufferingPanel();
+            this.panel2 = new UDrawSystemCS.DoubleBufferingPanel();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,14 +68,16 @@
             this.panel1.Controls.Add(this.treeView1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(200, 567);
+            this.panel1.Size = new System.Drawing.Size(160, 472);
             this.panel1.TabIndex = 0;
             // 
             // treeView1
             // 
             this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView1.Location = new System.Drawing.Point(0, 0);
+            this.treeView1.Margin = new System.Windows.Forms.Padding(2);
             this.treeView1.Name = "treeView1";
             treeNode1.Name = "DrawTest1";
             treeNode1.Tag = "101";
@@ -126,26 +128,29 @@
             treeNode8,
             treeNode12,
             treeNode16});
-            this.treeView1.Size = new System.Drawing.Size(200, 567);
+            this.treeView1.Size = new System.Drawing.Size(160, 472);
             this.treeView1.TabIndex = 0;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             // 
             // splitter1
             // 
-            this.splitter1.Location = new System.Drawing.Point(200, 0);
+            this.splitter1.Location = new System.Drawing.Point(160, 0);
+            this.splitter1.Margin = new System.Windows.Forms.Padding(2);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 567);
+            this.splitter1.Size = new System.Drawing.Size(2, 472);
             this.splitter1.TabIndex = 1;
             this.splitter1.TabStop = false;
             // 
             // panel2
             // 
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(203, 0);
+            this.panel2.Location = new System.Drawing.Point(162, 0);
+            this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(610, 567);
+            this.panel2.Size = new System.Drawing.Size(488, 472);
             this.panel2.TabIndex = 2;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
+            this.panel2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseClick);
             this.panel2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseDown);
             this.panel2.MouseLeave += new System.EventHandler(this.panel2_MouseLeave);
             this.panel2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseMove);
@@ -153,12 +158,13 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(813, 567);
+            this.ClientSize = new System.Drawing.Size(650, 472);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.panel1);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Form1";
             this.panel1.ResumeLayout(false);

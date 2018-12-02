@@ -337,6 +337,12 @@ namespace UDrawSystemCS.UDraw
             return list;
         }
 
+        public void Clear()
+        {
+            mDrawList.Clear();
+            mDrawList = new SortedDictionary<int, DrawList>();
+        }
+
         /**
          * リストに登録済みの描画オブジェクトを削除
          * 削除要求をバッファに積んでおき、描画前に削除チェックを行う

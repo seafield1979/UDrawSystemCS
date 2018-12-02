@@ -49,6 +49,8 @@ namespace UDrawSystemCS.UDraw
 #endif
         }
 
+
+
         /**
          * タッチ処理
          * @param vt
@@ -56,12 +58,9 @@ namespace UDrawSystemCS.UDraw
          */
         override public bool touchEvent(ViewTouch vt, PointF offset, out bool isHover)
         {
-            Point mpos = vt.args.Location;
-
             isHover = false;
             // 領域内をマウスダウンしたらtrueを返す
-            if (pos.X <= mpos.X && mpos.X <= pos.X + Width && 
-                pos.Y <= mpos.Y && mpos.Y <= pos.Y + Height )
+            if (checkInside(vt.args.Location))
             {
                 switch(vt.MEvent)
                 {

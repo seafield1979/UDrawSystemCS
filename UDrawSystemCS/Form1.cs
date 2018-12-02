@@ -4,6 +4,8 @@ using System.Windows.Forms;
 using UDrawSystemCS.UView;
 using UDrawSystemCS.UUtil;
 using UDrawSystemCS.UDraw;
+using UDrawSystemCS.UView.Text;
+using UDrawSystemCS.UView.Button;
 
 namespace UDrawSystemCS
 {
@@ -42,7 +44,7 @@ namespace UDrawSystemCS
         public Form1()
         {
             InitializeComponent();
-
+            
             Initialize();
         }
 
@@ -55,6 +57,7 @@ namespace UDrawSystemCS
             {
                 case "101":
                     {
+                        drawManager.Clear();
                         drawMode = EDrawMode.Draw1;
                         drawManager.initDrawList();
                         UDrawable obj = new UDrawableRect(100,  "rect1", 100, 100, 100, 100);
@@ -72,13 +75,31 @@ namespace UDrawSystemCS
                     }
                     break;
                 case "102":
-                    drawMode = EDrawMode.Draw2;
+                    {
+                        drawManager.Clear();
+                        drawMode = EDrawMode.Draw2;
+
+                        UTextView text1 = new UTextView("text1", 20, 100, StringAlignment.Near, StringAlignment.Near, true, 100, 100, Color.Red);
+                        drawManager.addDrawable(text1);
+                    }
                     break;
                 case "103":
                     drawMode = EDrawMode.Draw3;
                     break;
                 case "201":
-                    drawMode = EDrawMode.Button1;
+                    {
+                        drawMode = EDrawMode.Button1;
+
+                        drawManager.Clear();
+
+                        ButtonCallback callback1 = new ButtonCallback(ButtonCallback1);
+
+                        UButton button1 = new UButton(100, 1, "button1", 100, 100, 100, 50, callback1);
+                        drawManager.addDrawable(button1);
+
+                        UButton button2 = new UButton(100, 2, "button2", 100, 200, 100, 50, callback1);
+                        drawManager.addDrawable(button2);
+                    }
                     break;
                 case "202":
                     drawMode = EDrawMode.Button2;
@@ -124,12 +145,17 @@ namespace UDrawSystemCS
                     }
                     break;
                 case EDrawMode.Draw2:
-                    DrawDraw2(g);
+                    if (drawManager.draw(g))
+                    {
+                        panel2.Invalidate();
+                    }
+                    //DrawDraw2(g);
                     break;
                 case EDrawMode.Draw3:
                     DrawDraw3(g);
                     break;
                 case EDrawMode.Button1:
+                    DrawButton1(g);
                     break;
                 case EDrawMode.Button2:
                     break;
@@ -174,18 +200,50 @@ namespace UDrawSystemCS
         {
             g.FillRectangle(Brushes.Red, 100, 100, 100, 100);
         }
+
+
         private void DrawDraw2(Graphics g)
         {
-            g.FillRectangle(Brushes.Green, 100, 100, 100, 100);
+            string text = "aaa\r\nbbb";
+            Font font1 = UFontManager.getFont(UDrawUtility.FontName, 10);
+
+            SizeF size = g.MeasureString(text, font1, 1000);
+            g.DrawString(size.ToString(), font1, Brushes.Black, 100, 200);
+
+            g.FillRectangle(Brushes.Green, 100, 100, size.Width, size.Height);
+
+            g.DrawString(text, font1, Brushes.Black, 100, 100);
         }
+
+
         private void DrawDraw3(Graphics g)
         {
             g.FillRectangle(Brushes.Blue, 100, 100, 100, 100);
         }
 
+
+        private void DrawButton1(Graphics g)
+        {
+            if (drawManager.draw(g))
+            {
+                panel2.Invalidate();
+            }
+        }
+
+        private void DrawButton2(Graphics g)
+        {
+
+        }
+
+        private void DrawButton3(Graphics g)
+        {
+
+        }
+
         #endregion DrawModeメソッド
 
         #region Mouseイベント
+        
         private void panel2_MouseDown(object sender, MouseEventArgs e)
         {
             Console.WriteLine( "x:" + e.Location.X + " y:" + e.Location.Y);
@@ -231,7 +289,45 @@ namespace UDrawSystemCS
             }
         }
 
+
+        private void panel2_Click(object sender, EventArgs e)
+        {
+
+        }
+
         #endregion Mouseイベント
+
+
+        #region Delegate
+
+        public int ButtonCallback1(UButton button)
+        {
+            switch(button.Id)
+            {
+                case 1:
+                    MessageBox.Show("button1 pushed");
+                    break;
+                case 2:
+                    MessageBox.Show("button2 pushed");
+                    break;
+            }
+
+            
+            return 0;
+        }
+        
+        private void panel2_MouseClick(object sender, MouseEventArgs e)
+        {
+            vt.args = e;
+            vt.MEvent = MouseEvent.Click;
+
+            if (drawManager.touchEvent(vt))
+            {
+                panel2.Invalidate();
+            }
+        }
+
+        #endregion
 
     }
 

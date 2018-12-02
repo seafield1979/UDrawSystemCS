@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace UDrawSystemCS.UView
@@ -26,6 +27,15 @@ namespace UDrawSystemCS.UView
         public const String TAG = "ViewTouch";
 
         private MouseEvent mevent;
+
+        // クリック時のマウス座標
+        private Point clickPos;
+        public Point ClickPos
+        {
+            get { return clickPos; }
+            set { clickPos = value; }
+        }
+
 
         public MouseEvent MEvent
         {

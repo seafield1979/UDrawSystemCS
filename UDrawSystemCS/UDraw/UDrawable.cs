@@ -95,11 +95,21 @@ namespace UDrawSystemCS.UDraw
         protected int animeFrameMax;
         protected float animeRatio;
 
+        //
+        // コンストラクタ
+        //
         public UDrawable(int priority, string name, float x, float y, int width, int height)
         {
             this.name = name;
             this.setPos(x, y);
-            this.setSize(width, height);
+            if (width == 0 && height == 0)
+            {
+                this.size = Size.Empty;
+            }
+            else
+            {
+                this.setSize(width, height);
+            }
             updateRect();
 
             this.drawPriority = priority;
@@ -226,7 +236,7 @@ namespace UDrawSystemCS.UDraw
             size.Height = height;
             updateRect();
         }
-        public Rectangle getRect() { return rect; }
+        public virtual Rectangle getRect() { return rect; }
         public Rectangle getRectWithOffset(PointF offset)
         {
             return new Rectangle(rect.Left + (int)offset.X, rect.Top + (int)offset.Y,
@@ -607,6 +617,22 @@ namespace UDrawSystemCS.UDraw
         {
             double v1 = ((double)animeFrame / (double)animeFrameMax) * 180;
             return (int)((1.0 - Math.Sin(v1 * RAD)) * 255);
+        }
+
+        /// <summary>
+        /// 指定の座標がオブジェクト内にあるかどうかをチェックする
+        /// </summary>
+        /// <param name="_pos">チェック対象の座標</param>
+        /// <returns></returns>
+        protected bool checkInside(PointF _pos)
+        {
+            // 領域内をマウスダウンしたらtrueを返す
+            if (pos.X <= _pos.X && _pos.X <= pos.X + Width &&
+                pos.Y <= _pos.Y && _pos.Y <= pos.Y + Height)
+            {
+                return true;
+            }
+            return false;
         }
     }
 

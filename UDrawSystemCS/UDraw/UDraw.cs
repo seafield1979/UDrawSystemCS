@@ -125,20 +125,17 @@ namespace UDrawSystemCS.UDraw
             // todo
             //drawRectFill(canvas, paint, rect, color, 0, 0);
         }
-        public static void drawRectFill(Graphics g, Rectangle rect, int color,
-                                        int strokeWidth, int strokeColor)
+        public static void drawRectFill(Graphics g, Rectangle rect, Color color,
+                                        int strokeWidth, Color strokeColor)
         {
-            //paint.setStyle(Paint.Style.FILL);
-            //paint.setColor(color);
-            //canvas.drawRect(rect, paint);
+            Brush brush1 = new SolidBrush(color);
+            g.FillRectangle(brush1, rect);
 
-            //if (strokeWidth > 0)
-            //{
-            //    paint.setStyle(Paint.Style.STROKE);
-            //    paint.setStrokeWidth(strokeWidth);
-            //    paint.setColor(strokeColor);
-            //    canvas.drawRect(rect, paint);
-            //}
+            if (strokeWidth > 0)
+            {
+                Pen pen1 = new Pen(new SolidBrush(strokeColor));
+                g.DrawRectangle(pen1, rect);
+            }
         }
 
         /**
@@ -152,10 +149,10 @@ namespace UDrawSystemCS.UDraw
          * @param radius      角の半径
          * @param color
          */
-        public static void drawRoundRectFill(Graphics g, RectangleF rect,
-                                             float radius, Color color,
-                                             int strokeWidth, Color strokeColor)
-        {
+        //public static void drawRoundRectFill(Graphics g, RectangleF rect,
+        //                                     float radius, Color color,
+        //                                     int strokeWidth, Color strokeColor)
+        //{
             //paint.setStyle(Paint.Style.FILL);
             //paint.setColor(color);
             //canvas.drawRoundRect(rect, radius, radius, paint);
@@ -167,7 +164,7 @@ namespace UDrawSystemCS.UDraw
             //    paint.setColor(strokeColor);
             //    canvas.drawRoundRect(rect, radius, radius, paint);
             //}
-        }
+        //}
 
         /**
          * 円描画(線)
@@ -356,174 +353,27 @@ namespace UDrawSystemCS.UDraw
         }
 
         /**
-         * テキストを描画する（最初の１行のみ）
-         *
-         * @param canvas
-         * @param paint
-         * @param text
-         * @param alignment
-         * @param textSize
-         * @return
-         */
-        public static Size drawTextOneLine(Graphics g, String text,
-                                           UAlignment alignment, int textSize,
-                                           float x, float y, Color color)
-        {
-            return drawTextOneLine(g, text,
-                    alignment, textSize,
-                    x, y, color, Color.Transparent, 0);
-        }
-
-        public static Size drawTextOneLine(Graphics g, String text,
-                                           UAlignment alignment, int textSize,
-                                           float x, float y, Color color, Color bgColor, int margin)
-        {
-            if (text == null) return new Size(0,0);
-
-            // アンチエイリアス
-            //paint.setAntiAlias(true);
-
-            //// x,yにラインを表示 for Debug
-            //if (UDebug.drawTextBaseLine)
-            //{
-            //    drawLine(canvas, paint, x - UDpi.toPixel(17), y, x + UDpi.toPixel(17), y, UDpi.toPixel(1), Color.YELLOW);
-            //    drawLine(canvas, paint, x, y - UDpi.toPixel(17), x, y + UDpi.toPixel(17), UDpi.toPixel(1), Color.YELLOW);
-            //}
-
-            //int pos = text.indexOf("\n");
-            //String _text;
-            //if (pos != -1)
-            //{
-            //    _text = text.substring(0, pos);
-            //}
-            //else
-            //{
-            //    _text = text;
-            //}
-
-            //paint.setStyle(Paint.Style.FILL);
-            //paint.setStrokeWidth(1);
-            //paint.setTextSize(textSize);
-
-            //int width = (int)paint.measureText(text);
-            //Paint.FontMetrics fontMetrics = paint.getFontMetrics();
-
-            //// テキストの左上端がx,yと一致するように補正
-            //// テキストの左上端がx,yと一致するように補正
-            //switch (alignment)
-            //{
-            //    case None:
-            //        y -= fontMetrics.ascent;
-            //        break;
-            //    case CenterX:
-            //        x -= width / 2;
-            //        y -= fontMetrics.ascent;
-            //        break;
-            //    case CenterY:
-            //        y -= fontMetrics.ascent / 2 + textSize * 0.15;
-            //        break;
-            //    case Center:
-            //        x -= width / 2;
-            //        y -= fontMetrics.ascent / 2 + textSize * 0.15;
-            //        break;
-            //    case Right:
-            //        x -= width;
-            //        y -= fontMetrics.ascent;
-            //        break;
-            //    case Right_CenterY:
-            //        x -= width;
-            //        y -= fontMetrics.ascent / 2 + textSize * 0.15;
-            //        break;
-            //}
-
-            //if (bgColor != 0)
-            //{
-            //    paint.setColor(bgColor);
-            //    canvas.drawRect(x - margin, y - textSize - margin,
-            //            x + width + margin, y + margin, paint);
-            //}
-
-            //paint.setColor(color);
-            //canvas.drawText(_text, x, y, paint);
-
-            //return new Size(width, textSize);
-
-            return new Size(100, 100);
-        }
-
-        /**
          * テキストを描画（複数行対応)
          *
          * @param canvas
          * @param text
          * @param alignment
-         * @param textSize
+         * @param fontSize
          * @return
          */
-        public static Size drawText(Graphics g, String text,
-                                    UAlignment alignment, int textSize,
+        public static void drawText(Graphics g, String text,
+                                    StringAlignment alignX, StringAlignment alignY, bool multiLine, Font font,
                                     float x, float y, Color color)
         {
-            return drawText(g, text, alignment, textSize, x, y, color, 0);
-        }
+            if (text == null)
+            {
+                return;
+            }
 
-        public static Size drawText(Graphics g, String text,
-                                    UAlignment alignment, int textSize,
-                                    float x, float y, Color color, int bgColor)
-        {
-            if (text == null) return new Size(0, 0);
+            StringFormat sf = new StringFormat();
+            sf.Alignment = StringAlignment.Near;
 
-            //TextPaint textPaint = new TextPaint();
-
-            //// アンチエイリアス
-            //textPaint.setAntiAlias(true);
-
-            //// x,yにラインを表示 for Debug
-            //if (UDebug.drawTextBaseLine)
-            //{
-            //    drawLine(canvas, textPaint, x - 50, y, x + 50, y, 3, Color.YELLOW);
-            //    drawLine(canvas, textPaint, x, y - 50, x, y + 50, 3, Color.YELLOW);
-            //}
-
-
-            //// 改行ができるようにTextPaintとStaticLayoutを使用する
-            //textPaint.setTextSize(textSize);
-            //textPaint.setColor(color);
-
-            //StaticLayout mTextLayout = new StaticLayout(text, textPaint,
-            //        canvas.getWidth() * 4 / 5, Layout.Alignment.ALIGN_NORMAL,
-            //        1.0f, 0.0f, false);
-
-            //Size size = getTextSize(mTextLayout);
-            //switch (alignment)
-            //{
-            //    case CenterX:
-            //        x = x - size.width / 2;
-            //        break;
-            //    case CenterY:
-            //        y = y - size.height / 2;
-            //        break;
-            //    case Center:
-            //        x = x - size.width / 2;
-            //        y = y - size.height / 2;
-            //        break;
-            //    case None:
-            //        break;
-            //}
-
-            //canvas.save();
-            //canvas.translate(x, y);
-
-            /////テキストの描画位置の指定
-            //textPaint.setStyle(Paint.Style.FILL);
-            //textPaint.setStrokeWidth(1);
-            //textPaint.setColor(color);
-            //mTextLayout.draw(canvas);
-            //canvas.restore();
-
-            //return size;
-
-            return new Size(0, 0);
+            g.DrawString(text, font, UBrushManager.getBrush(color), x, y);
         }
 
         /**
@@ -531,9 +381,12 @@ namespace UDrawSystemCS.UDraw
          * @param canvasW
          * @return
          */
-        public static Size getTextSize(int canvasW, String text, int textSize)
+        public static Size getTextSize( Graphics g, String text, int fontSize)
         {
-            //if (text == null) return new Size();
+            if (string.IsNullOrEmpty(text))
+            {
+                return new Size();
+            }
 
             //TextPaint textPaint = new TextPaint();
             //textPaint.setTextSize(textSize);
@@ -541,10 +394,11 @@ namespace UDrawSystemCS.UDraw
             //        canvasW * 4 / 5, Layout.Alignment.ALIGN_NORMAL,
             //        1.0f, 0.0f, false);
 
-            //int height = textLayout.getHeight();
-            //int maxWidth = 0;
-            //int _width;
 
+            Font font1 = new Font(UDrawUtility.FontName, fontSize);
+            
+            SizeF stringSize = g.MeasureString(text, font1, 1000);
+            
             //// 各行の最大の幅を計算する
             //for (int i = 0; i < textLayout.getLineCount(); i++)
             //{
@@ -577,17 +431,7 @@ namespace UDrawSystemCS.UDraw
 
         //    return new Size(maxWidth, height);
         //}
-
-        /**
-         * １行テキストの描画サイズを取得する
-         */
-        public static Size getOneLineTextSize(Graphics g, String text, int textSize)
-        {
-            //paint.setTextSize(textSize);
-            //return new Size((int)paint.measureText(text), textSize);
-            return new Size();
-        }
-
+        
         /**
          * Bitmap画像
          */

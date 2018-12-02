@@ -57,12 +57,14 @@
     <Compile Include="UDraw\UDrawable.cs" />
     <Compile Include="UDraw\UDrawableRect.cs" />
     <Compile Include="UDraw\UDrawManager.cs" />
+    <Compile Include="UDraw\UDrawUtility.cs" />
     <Compile Include="UUtil\TimeCountByPerformanceCounter.cs" />
     <Compile Include="UUtil\UDebug.cs" />
     <Compile Include="UUtil\ULog.cs" />
     <Compile Include="UUtil\UUtility.cs" />
+    <Compile Include="UView\Button\UButton.cs" />
     <Compile Include="UView\ScrollBar\UScrollBar.cs" />
-    <Compile Include="UView\UTextView.cs" />
+    <Compile Include="UView\Text\UTextView.cs" />
     <Compile Include="UView\ViewTouch.cs" />
     <Compile Include="UView\Window\ULogWindow.cs" />
     <Compile Include="UView\Window\UWindow.cs" />
