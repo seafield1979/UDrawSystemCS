@@ -6,6 +6,7 @@ using UDrawSystemCS.UUtil;
 using UDrawSystemCS.UDraw;
 using UDrawSystemCS.UView.Text;
 using UDrawSystemCS.UView.Button;
+using UDrawSystemCS.UView.LogView;
 
 namespace UDrawSystemCS
 {
@@ -102,7 +103,14 @@ namespace UDrawSystemCS
                     }
                     break;
                 case "202":
-                    drawMode = EDrawMode.Button2;
+                    {
+                        drawMode = EDrawMode.Button2;
+
+                        drawManager.Clear();
+
+                        ZoomView zoomView = new ZoomView(100, "zoom1", 100, 100);
+                        drawManager.addDrawable(zoomView);
+                    }
                     break;
                 case "203":
                     drawMode = EDrawMode.Button3;
@@ -158,6 +166,10 @@ namespace UDrawSystemCS
                     DrawButton1(g);
                     break;
                 case EDrawMode.Button2:
+                    if (drawManager.draw(g))
+                    {
+                        panel2.Invalidate();
+                    }
                     break;
                 case EDrawMode.Button3:
                     break;

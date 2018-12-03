@@ -371,9 +371,10 @@ namespace UDrawSystemCS.UDraw
             }
 
             StringFormat sf = new StringFormat();
-            sf.Alignment = StringAlignment.Near;
+            sf.Alignment = alignX;
+            sf.LineAlignment = alignY;
 
-            g.DrawString(text, font, UBrushManager.getBrush(color), x, y);
+            g.DrawString(text, font, UBrushManager.getBrush(color), x, y, sf);
         }
 
         /**

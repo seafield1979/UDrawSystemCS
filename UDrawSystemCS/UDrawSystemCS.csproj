@@ -63,6 +63,7 @@
     <Compile Include="UUtil\ULog.cs" />
     <Compile Include="UUtil\UUtility.cs" />
     <Compile Include="UView\Button\UButton.cs" />
+    <Compile Include="UView\LogView\ZoomView.cs" />
     <Compile Include="UView\ScrollBar\UScrollBar.cs" />
     <Compile Include="UView\Text\UTextView.cs" />
     <Compile Include="UView\ViewTouch.cs" />

@@ -233,5 +233,27 @@ namespace UDrawSystemCS.UDraw
         {
             return (float)(value * zoomRate.Value);
         }
+
+
+        // 範囲チェック
+        public static bool checkInside(PointF pos, Rectangle rect)
+        {
+            if (rect.Left <= pos.X && pos.X <= rect.Right &&
+                rect.Top <= pos.Y && pos.Y <= rect.Bottom)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public static bool checkInside(PointF pos, int x, int y, int width, int height)
+        {
+            if (x <= pos.X && pos.X <= x + width &&
+                y <= pos.Y && pos.Y <= y + height)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

@@ -79,8 +79,7 @@ namespace UDrawSystemCS.UDraw
             get { return color; }
             set { color = value; }
         }
-
-
+        
         // アニメーション用
         public const int ANIME_FRAME = 20;
         protected bool _isAnimating;
