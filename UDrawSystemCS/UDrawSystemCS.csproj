@@ -59,6 +59,7 @@
     <Compile Include="UDraw\UDrawManager.cs" />
     <Compile Include="UDraw\UDrawUtility.cs" />
     <Compile Include="UUtil\TimeCountByPerformanceCounter.cs" />
+    <Compile Include="UUtil\UColor.cs" />
     <Compile Include="UUtil\UDebug.cs" />
     <Compile Include="UUtil\ULog.cs" />
     <Compile Include="UUtil\UUtility.cs" />

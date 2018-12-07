@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using UDrawSystemCS.UDraw;
+using UDrawSystemCS.UUtil;
 
 namespace UDrawSystemCS.UView.LogView
 {
@@ -102,7 +103,7 @@ namespace UDrawSystemCS.UView.LogView
         //
         public ZoomRate zoom;
         private Font font1;
-        private Brush brush1, brush2, brush3, hoverBrush;
+        private Brush brush1, brush2, brush3, hoverBrush1, hoverBrush2, hoverBrush3;
         private Rectangle rect1, rect2, rect3;
         private int hoverNo;
         
@@ -116,7 +117,9 @@ namespace UDrawSystemCS.UView.LogView
             brush1 = Brushes.DarkBlue;
             brush2 = Brushes.DarkRed;
             brush3 = Brushes.LightGray;
-            hoverBrush = Brushes.White;
+            hoverBrush1 = new SolidBrush(Color.FromArgb(UColor.setBrightness(Color.DarkBlue.ToArgb(), 128)));
+            hoverBrush2 = new SolidBrush(Color.FromArgb(UColor.setBrightness(Color.DarkRed.ToArgb(), 128)));
+            hoverBrush3 = new SolidBrush(Color.FromArgb(UColor.setBrightness(Color.Gray.ToArgb(), 128)));
             zoom = new ZoomRate();
             int _x = (int)pos.X;
             rect1 = new Rectangle(_x, (int)pos.Y, smallButtonW, smallButtonW);
@@ -137,21 +140,21 @@ namespace UDrawSystemCS.UView.LogView
             Brush brush;
 
             // -ボタン
-            brush = (isHover && hoverNo == 1) ? hoverBrush : brush1;
+            brush = (isHover && hoverNo == 1) ? hoverBrush1 : brush1;
             g.FillRectangle(brush, x, y, smallButtonW, smallButtonW);
             UDraw.UDraw.drawText(g, "-", StringAlignment.Center, StringAlignment.Center, false, font1, x + smallButtonW / 2, y + smallButtonW / 2, Color.White);
 
             x += smallButtonW + marginX;
 
             // zoom rateボタン
-            brush = (isHover && hoverNo == 2) ? hoverBrush : brush3;
+            brush = (isHover && hoverNo == 2) ? hoverBrush3 : brush3;
             g.FillRectangle(brush, x, y, centerButtonW, centerButtonH);
             UDraw.UDraw.drawText(g, zoom.ToString(), StringAlignment.Center, StringAlignment.Center, false, font1, x + centerButtonW / 2, y + centerButtonH / 2, Color.Black);
 
             x += centerButtonW + marginX;
 
             // +ボタン
-            brush = (isHover && hoverNo == 3) ? hoverBrush : brush2;
+            brush = (isHover && hoverNo == 3) ? hoverBrush2 : brush2;
             g.FillRectangle(brush, x, y, smallButtonW, smallButtonW);
             UDraw.UDraw.drawText(g, "+", StringAlignment.Center, StringAlignment.Center, false, font1, x + smallButtonW / 2, y + smallButtonW / 2, Color.White);
         }
